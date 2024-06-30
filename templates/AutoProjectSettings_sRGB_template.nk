@@ -1,0 +1,174 @@
+#! C:/Program Files/Nuke11.3v1/nuke-11.3.1.dll -nx
+#write_info Final_Write file:"" format:"1280 720 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"default (linear)" datatype:"16 bit half" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 11.3 v1
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="69" y="-9" w="3762" h="2131" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="1503"/>
+            <splitter orientation="1">
+                <split size="1503"/>
+                <dock id="" hideTitles="1" activePageId="uk.co.thefoundry.scripteditor.2">
+                    <page id="uk.co.thefoundry.scripteditor.2"/>
+                </dock>
+            </splitter>
+            <split size="2255"/>
+            <splitter orientation="1">
+                <split size="52"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+                <split size="906"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                </dock>
+                <split size="1289"/>
+                <splitter orientation="2">
+                    <split size="1037"/>
+                    <dock id="" activePageId="Viewer.1">
+                        <page id="Viewer.1"/>
+                    </dock>
+                    <split size="1036"/>
+                    <dock id="" activePageId="Properties.1">
+                        <page id="Properties.1"/>
+                    </dock>
+                </splitter>
+            </splitter>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+inputs 0
+name I:/Plates/_APS_/templates/AutoProjectSettings_sRGB_template.nk
+format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+proxy_type scale
+proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+colorManagement Nuke
+workingSpaceLUT linear
+monitorLut sRGB
+int8Lut sRGB
+int16Lut sRGB
+logLut Cineon
+floatLut linear
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x28242aff
+label "<center><h3><img src = 'Read.png'>Input"
+note_font_size 42
+xpos -697
+ypos -545
+bdwidth 427
+bdheight 344
+}
+BackdropNode {
+inputs 0
+name BackdropNode2
+tile_color 0xb1a1cff
+label "<center><h3><img src = 'Write.png'>Output"
+note_font_size 42
+xpos -737
+ypos 381
+bdwidth 519
+bdheight 420
+}
+Read {
+inputs 0
+file_type exr
+format "1280 720 0 0 1280 720 1 HD_720"
+before black
+last 100
+after black
+origfirst 89816
+origlast 100
+origset true
+name Read_Main
+xpos -519
+ypos -446
+}
+set Nc785c00 [stack 0]
+Viewer {
+frame_range 1-100
+viewerProcess None
+name Viewer1
+xpos -519
+ypos 1090
+addUserKnob {20 viewerLockInputStates +INVISIBLE}
+addUserKnob {26 READ_ME -STARTLINE +INVISIBLE T "The following knobs are needed for the Viewer Lock\nplugin to function. If you don't have Viewer Lock,\nyou can safely ignore or delete them.\n\nIf they're causing problems, let me know at\nmatt_roe@live.com.\n"}
+addUserKnob {6 inputState0 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState1 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState2 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState3 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState4 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState5 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState6 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState7 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState8 +INVISIBLE +STARTLINE}
+addUserKnob {6 inputState9 +INVISIBLE +STARTLINE}
+}
+StickyNote {
+inputs 0
+name StickyNote1
+label "Project template\nNuke\nnuke-default (sRGB)\n"
+note_font_size 50
+xpos -353
+ypos -75
+}
+push $Nc785c00
+TimeClip {
+time ""
+origset true
+mask_metadata true
+name TimeClip1
+label "\[value first] - \[value last]\n\[value knob.frame]"
+xpos -519
+ypos -346
+}
+Dot {
+name Plate
+label Plate
+note_font_size 20
+xpos -485
+ypos -246
+}
+set N5352f800 [stack 0]
+Dot {
+name Dot1
+note_font_size 20
+xpos -378
+ypos 643
+hide_input true
+}
+push $N5352f800
+Dot {
+name FinalOutput
+label "Final Output"
+note_font_size 20
+xpos -485
+ypos 489
+}
+Crop {
+box {0 0 1920 1080}
+name Crop1
+xpos -519
+ypos 589
+}
+CopyMetaData {
+inputs 2
+name CopyMetaData1
+xpos -519
+ypos 639
+}
+Write {
+colorspace {{Read1.colorspace}}
+file_type exr
+compression "Zip (16 scanlines)"
+first_part none
+create_directories true
+name Final_Write
+label "\[value knob.file]"
+xpos -519
+ypos 725
+}
