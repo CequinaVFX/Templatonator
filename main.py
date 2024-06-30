@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 import nuke
-
+import nukescripts
 
 def save_path():
     return '/'.join([os.path.dirname(__file__), 'save_template'])
@@ -62,26 +62,22 @@ class Templatonator:
         self.template_file = get_template_file(template=data['template'])
         self.save_filename = save_filename(template=data['template'])
 
-        mode = data['mode']
         print()
-        print(mode)
+        print(data['mode'])
         print(self.template_file)
         print(self.save_filename)
         print()
-        if mode == 'paste template':
-            self.paste_template()
 
-        elif mode == 'script read':
-            self.script_read()
+        modes = {
+                 "paste template" : self.paste_template,
+                 "script read" : self.script_read,
+                 "save to script" : self.save_to_script,
+                 "open template" : self.open_template,
+                 "copy as text" : self.copy_as_text
+                }
 
-        elif mode == 'save to script':
-            self.save_to_script()
-
-        elif mode == 'open template':
-            self.open_template()
-
-        elif mode == 'copy as text':
-            self.copy_as_text()
+        selected_mode = modes[data['mode']]
+        _result = selected_mode()
 
     def paste_template(self):
         """
@@ -125,6 +121,7 @@ class Templatonator:
             template_content = read_original.read()
 
         nuke.saveToScript(self.save_filename, template_content)
+        nuke.scriptOpen(self.save_filename)
 
     def open_template(self):
         """
@@ -142,6 +139,7 @@ class Templatonator:
             open_destination.write(template_content)
 
         nuke.scriptOpen(self.save_filename)
+
 
 class TemplatonatorUI(nukescripts.PythonPanel):
     def __init__(self):
