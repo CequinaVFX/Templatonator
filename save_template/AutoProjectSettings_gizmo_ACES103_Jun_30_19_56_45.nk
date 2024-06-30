@@ -1,0 +1,316 @@
+#! C:/Program Files/Nuke11.3v1/nuke-11.3.1.dll -nx
+#write_info Final_Write file:"file.exr" format:"1280 720 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1 100" fps:"0" colorspace:"default (ACES - ACEScg)" datatype:"16 bit half" transfer:"unknown" views:"main" colorManagement:"OCIO"
+version 11.3 v1
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="69" y="-9" w="3762" h="2131" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="2381"/>
+            <splitter orientation="1">
+                <split size="1189"/>
+                <dock id="" hideTitles="1" activePageId="uk.co.thefoundry.scripteditor.2">
+                    <page id="uk.co.thefoundry.scripteditor.2"/>
+                </dock>
+                <split size="1188"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                </dock>
+            </splitter>
+            <split size="1377"/>
+            <splitter orientation="2">
+                <split size="1041"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="1038"/>
+                <splitter orientation="1">
+                    <split size="46"/>
+                    <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                        <page id="Toolbar.1"/>
+                    </dock>
+                    <split size="1327"/>
+                    <dock id="" activePageId="Properties.1">
+                        <page id="Properties.1"/>
+                    </dock>
+                </splitter>
+            </splitter>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name I:/Plates/_APS_/templates/AutoProjectSettings_gizmo_ACES103.nk
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement OCIO
+ OCIO_config aces_1.0.3
+ defaultViewerLUT "OCIO LUTs"
+ workingSpaceLUT "ACES - ACEScg"
+ monitorLut ACES/Rec.709
+ int8Lut "Utility - sRGB - Texture"
+ int16Lut "ACES - ACEScc"
+ logLut "Input - ADX - ADX10"
+ floatLut "ACES - ACEScg"
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x28242aff
+ label "<center><h3><img src = 'Read.png'>Input"
+ note_font_size 42
+ xpos 156
+ ypos -426
+ bdwidth 427
+ bdheight 344
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0xb1a1cff
+ label "<center><h3><img src = 'Write.png'>Output"
+ note_font_size 42
+ xpos 116
+ ypos 500
+ bdwidth 519
+ bdheight 420
+}
+Read {
+ inputs 0
+ file_type exr
+ format "1280 720 0 0 1280 720 1 HD_720"
+ before black
+ last 100
+ after black
+ origfirst 89816
+ origlast 100
+ origset true
+ name Read_Main
+ xpos 334
+ ypos -327
+}
+set Nd4239800 [stack 0]
+Viewer {
+ frame 1001
+ frame_range 1001-1001
+ name Viewer1
+ xpos 76
+ ypos 1161
+ addUserKnob {20 viewerLockInputStates +INVISIBLE}
+ addUserKnob {26 READ_ME -STARTLINE +INVISIBLE T "The following knobs are needed for the Viewer Lock\nplugin to function. If you don't have Viewer Lock,\nyou can safely ignore or delete them.\n\nIf they're causing problems, let me know at\nmatt_roe@live.com.\n"}
+ addUserKnob {6 inputState0 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState1 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState2 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState3 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState4 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState5 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState6 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState7 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState8 +INVISIBLE +STARTLINE}
+ addUserKnob {6 inputState9 +INVISIBLE +STARTLINE}
+}
+push $Nd4239800
+TimeClip {
+ time ""
+ origset true
+ mask_metadata true
+ name TimeClip1
+ label "\[value first] - \[value last]\n\[value knob.frame]"
+ xpos 334
+ ypos -227
+}
+Dot {
+ name Plate
+ label Plate
+ note_font_size 20
+ xpos 368
+ ypos -127
+}
+set Nd43a4000 [stack 0]
+Dot {
+ name Dot1
+ note_font_size 20
+ xpos 475
+ ypos 762
+ hide_input true
+}
+push $Nd43a4000
+Dot {
+ name FinalOutput
+ label "Final Output"
+ note_font_size 20
+ xpos 368
+ ypos 608
+}
+Crop {
+ box {0 0 1920 1080}
+ name Crop1
+ xpos 334
+ ypos 708
+}
+CopyMetaData {
+ inputs 2
+ name CopyMetaData1
+ xpos 334
+ ypos 758
+}
+Write {
+ file file.exr
+ colorspace {{Read1.colorspace}}
+ file_type exr
+ compression "Zip (16 scanlines)"
+ first_part none
+ create_directories true
+ name Final_Write
+ label "\[value knob.file]"
+ xpos 334
+ ypos 844
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "Project template\nNuke\nOCIO ACES 1.0.3\n2K Cinescope\n"
+ note_font_size 50
+ xpos 503
+ ypos 45
+}
+Gizmo {
+ inputs 0
+ name Guideline
+ xpos 97
+ ypos 240
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x2d3947ff
+  label Controller
+  note_font_size 92
+  xpos 860
+  ypos -332
+  bdwidth 480
+  bdheight 470
+ }
+ NoOp {
+  inputs 0
+  name master_controller
+  xpos 1060
+  ypos -82
+  addUserKnob {20 User}
+  addUserKnob {7 border_size R 1 20}
+  border_size 3
+  addUserKnob {12 h1}
+  h1 {-26 234}
+  addUserKnob {12 h2}
+  h2 {-40 566}
+  addUserKnob {12 v1}
+  v1 {526 -160}
+  addUserKnob {12 v2}
+  v2 {1474 -172}
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {0 0.624994278 1 1}
+  name Constant1
+  xpos 610
+  ypos -322
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 610
+  ypos -250
+ }
+ Reformat {
+  type "to box"
+  box_width {{Input1.width}}
+  box_height {{Input1.height}}
+  resize distort
+  name Reformat1
+  xpos 610
+  ypos -130
+ }
+set Nd4390c00 [stack 0]
+ Crop {
+  box {{master_controller.v2.x} 0 {"master_controller.v2.x + master_controller.border_size"} {Input1.height}}
+  name Crop4
+  xpos 610
+  ypos -10
+ }
+ Dot {
+  name Dot1
+  xpos 644
+  ypos 114
+ }
+push $Nd4390c00
+ Dot {
+  name Dot7
+  xpos 534
+  ypos -78
+ }
+ Crop {
+  box {{master_controller.v1.x} 0 {"master_controller.v1.x + master_controller.border_size"} {Input1.height}}
+  name Crop3
+  xpos 500
+  ypos -10
+ }
+ Dot {
+  name Dot2
+  xpos 534
+  ypos 90
+ }
+push $Nd4390c00
+ Dot {
+  name Dot6
+  xpos 424
+  ypos -102
+ }
+ Crop {
+  box {0 {master_controller.h2.y} {Input1.width} {"master_controller.h2.y + master_controller.border_size"}}
+  name Crop2
+  xpos 390
+  ypos -10
+ }
+ Dot {
+  name Dot3
+  xpos 424
+  ypos 66
+ }
+push 0
+push $Nd4390c00
+ Dot {
+  name Dot5
+  xpos 316
+  ypos -126
+ }
+ Crop {
+  box {0 {master_controller.h1.y} {Input1.width} {"master_controller.h1.y + master_controller.border_size"}}
+  name Crop1
+  xpos 282
+  ypos -10
+ }
+ Dot {
+  name Dot4
+  xpos 316
+  ypos 42
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -150
+  ypos -130
+ }
+ Merge2 {
+  inputs 5+1
+  name Merge1
+  xpos -150
+  ypos 110
+ }
+ Output {
+  name Output1
+  xpos -150
+  ypos 206
+ }
+end_group

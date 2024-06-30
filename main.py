@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 import nuke
-import nukescripts
 
 
 def save_path():
@@ -64,6 +63,25 @@ class Templatonator:
         self.save_filename = save_filename(template=data['template'])
 
         mode = data['mode']
+        print()
+        print(mode)
+        print(self.template_file)
+        print(self.save_filename)
+        print()
+        if mode == 'paste template':
+            self.paste_template()
+
+        elif mode == 'script read':
+            self.script_read()
+
+        elif mode == 'save to script':
+            self.save_to_script()
+
+        elif mode == 'open template':
+            self.open_template()
+
+        elif mode == 'copy as text':
+            self.copy_as_text()
 
     def paste_template(self):
         """
@@ -99,16 +117,22 @@ class Templatonator:
         # save scripts as
         nuke.scriptSaveAs(self.save_filename)
 
-
     def save_to_script(self):
         """
         nuke.saveToScript(filename, fileContent)> None
         """
-        pass
+        with open(self.template_file, 'r+') as read_original:
+            template_content = read_original.read()
 
+        nuke.saveToScript(self.save_filename, template_content)
 
     def open_template(self):
-        pass
+        """
+
+        """
+        nuke.scriptOpen(self.template_file)
+
+        nuke.scriptSaveAs(self.save_filename)
 
     def copy_as_text(self):
         with open(self.template_file, 'r+') as read_original:
@@ -117,6 +141,7 @@ class Templatonator:
         with open(self.save_filename, 'w+') as open_destination:
             open_destination.write(template_content)
 
+        nuke.scriptOpen(self.save_filename)
 
 class TemplatonatorUI(nukescripts.PythonPanel):
     def __init__(self):
@@ -134,11 +159,11 @@ class TemplatonatorUI(nukescripts.PythonPanel):
         self.spc10 = nuke.Text_Knob('spc10', '', ' ')
         self.addKnob(self.spc10)
 
-        self.mode_knob = nuke.Enumeration_Knob('mode', 'mode', ['Load Template',
-                                                                'Open template',
-                                                                'Script read',
-                                                                'Copy as text',
-                                                                'Terminal command'])
+        self.mode_knob = nuke.Enumeration_Knob('mode', 'mode', ['paste template',
+                                                                'script read',
+                                                                'save to script',
+                                                                'open template',
+                                                                'copy as text'])
         self.addKnob(self.mode_knob)
 
         self.spc30 = nuke.Text_Knob('spc30', '', ' ')

@@ -1,0 +1,745 @@
+#! C:/Program Files/Nuke11.3v1/nuke-11.3.1.dll -nx
+version 11.3 v1
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="69" y="-9" w="3762" h="2131" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="2381"/>
+            <splitter orientation="1">
+                <split size="1189"/>
+                <dock id="" hideTitles="1" activePageId="uk.co.thefoundry.scripteditor.2">
+                    <page id="uk.co.thefoundry.scripteditor.2"/>
+                </dock>
+                <split size="1188"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                </dock>
+            </splitter>
+            <split size="1377"/>
+            <splitter orientation="2">
+                <split size="1041"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="1038"/>
+                <splitter orientation="1">
+                    <split size="46"/>
+                    <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                        <page id="Toolbar.1"/>
+                    </dock>
+                    <split size="1327"/>
+                    <dock id="" activePageId="Properties.1">
+                        <page id="Properties.1"/>
+                    </dock>
+                </splitter>
+            </splitter>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name I:/Plates/_APS_/templates/AutoProjectSettings_ACES_Afanasy_group.nk
+ frame 1001
+ first_frame 1001
+ last_frame 1050
+ lock_range true
+ format "1828 1556 0 0 1828 1556 2 2K_Cinemascope"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement OCIO
+ OCIO_config aces_1.0.3
+ defaultViewerLUT "OCIO LUTs"
+ workingSpaceLUT "ACES - ACEScg"
+ monitorLut ACES/sRGB
+ int8Lut "Utility - sRGB - Texture"
+ int16Lut "ACES - ACEScc"
+ logLut "Input - ADX - ADX10"
+ floatLut "ACES - ACEScg"
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x28242aff
+ label "<center><h3><img src = 'Read.png'>Input"
+ note_font_size 42
+ xpos -408
+ ypos -439
+ bdwidth 427
+ bdheight 344
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0xb1a1cff
+ label "<center><h3><img src = 'Write.png'>Output"
+ note_font_size 42
+ xpos -511
+ ypos 460
+ bdwidth 584
+ bdheight 503
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "Project template\nOCIO ACES 1.0.3\n2K Cinescope"
+ note_font_size 50
+ xpos -71
+ ypos 54
+}
+Read {
+ inputs 0
+ file_type exr
+ format "1280 720 0 0 1280 720 1 HD_720"
+ before black
+ last 100
+ after black
+ origfirst 89816
+ origlast 100
+ origset true
+ name Read_Main
+ xpos -230
+ ypos -340
+}
+TimeClip {
+ time ""
+ origset true
+ mask_metadata true
+ name TimeClip1
+ label "\[value first] - \[value last]\n\[value knob.frame]"
+ xpos -230
+ ypos -240
+}
+Dot {
+ name Plate
+ label Plate
+ note_font_size 20
+ xpos -196
+ ypos -140
+}
+set N9069fc00 [stack 0]
+Dot {
+ name Dot1
+ note_font_size 20
+ xpos -89
+ ypos 749
+ hide_input true
+}
+push $N9069fc00
+Dot {
+ name FinalOutput
+ label "Final Output"
+ note_font_size 20
+ xpos -196
+ ypos 595
+}
+Crop {
+ box {0 0 1920 1080}
+ name Crop1
+ xpos -230
+ ypos 695
+}
+CopyMetaData {
+ inputs 2
+ name CopyMetaData1
+ xpos -230
+ ypos 745
+}
+Dot {
+ name Dot2
+ note_font_size 20
+ xpos -196
+ ypos 824
+}
+Group {
+ name afanasy1
+ help "Afanasy gizmo\n F10 create\n F11 render"
+ tile_color 0x6e9048ff
+ note_font_color 0x200ff
+ selected true
+ xpos -79
+ ypos 820
+ addUserKnob {20 "" l General}
+ addUserKnob {1 jobname l "Job Name"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {3 framefirst l "Frame First"}
+ framefirst 1
+ addUserKnob {3 framelast l Last -STARTLINE}
+ framelast 11
+ addUserKnob {3 frameinc l Increment -STARTLINE}
+ frameinc 1
+ addUserKnob {32 knob l "Use Root Time Range" T "\n                  knob \[node this].framefirst \[knob root.first_frame]\n                  knob \[node this].framelast  \[knob root.last_frame ]\n      " +STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {3 framespertask l "Frames Per Task"}
+ framespertask 1
+ addUserKnob {3 framesequential l Sequential -STARTLINE}
+ framesequential 1
+ addUserKnob {6 skipexisting l "Skip Existing Files" +STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {22 knob_1 l RENDER -STARTLINE T "cgru.render( nuke.toNode(\"this\"))"}
+ addUserKnob {6 startpaused l "Start Paused" -STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {1 timecode l "Time Code"}
+ addUserKnob {6 timecode_use l Use -STARTLINE}
+ timecode_use true
+ addUserKnob {22 timecode_get l Get -STARTLINE T "cgru.setTimeCodeFromFrames( nuke.toNode(\"this\"))"}
+ addUserKnob {22 timecode_set l Set -STARTLINE T "cgru.setFramesFromTimeCode( nuke.toNode(\"this\"))"}
+ addUserKnob {20 "" l Parameters}
+ addUserKnob {4 platform l Plafrorm M {Any Native}}
+ addUserKnob {3 maxruntasks l "Max Running Tasks"}
+ maxruntasks -1
+ addUserKnob {3 priority l Priority}
+ priority -1
+ addUserKnob {1 hostsmask l "Hosts Mask"}
+ addUserKnob {1 hostsmaskexcl l Exclude -STARTLINE}
+ addUserKnob {1 dependmask l "Depend Mask"}
+ addUserKnob {1 dependmaskglbl l Global -STARTLINE}
+ addUserKnob {3 capacity l Capacity}
+ capacity -1
+ addUserKnob {3 maxperhost l "Max Tasks Per Host"}
+ maxperhost -1
+ addUserKnob {3 maxruntime l "Max Task Run Time (min)"}
+ maxruntime -1
+ addUserKnob {3 need_memory l "Need RAM (GB)"}
+ need_memory -1
+ addUserKnob {7 need_gpu_mem l "Need GPU RAM (GB)" R -1 32}
+ need_gpu_mem -1
+ addUserKnob {20 "" l MultiWrite}
+ addUserKnob {1 addnodes l "Add Nodes"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 independent l "Connected nodes are independent" -STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 reversedeps l "Reverse dependence on connected nodes" -STARTLINE}
+ reversedeps true
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 fullrange l "Wait whole frame range rendered" -STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 forceframes l "Force frame range" -STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 singlejob l "Construct single job" -STARTLINE}
+ singlejob true
+ addUserKnob {20 "" l Advanced}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 tmpscene l "Create and render temporary scene file" -STARTLINE}
+ tmpscene true
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 tickets_use l Tickets -STARTLINE}
+ addUserKnob {1 tickets_data l "" -STARTLINE}
+ tickets_data NUKE:1,NET:100
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 pools_use l Pools -STARTLINE}
+ addUserKnob {1 pools_data l "" -STARTLINE}
+ pools_data farm:10,work:-10,comp:10,sim:-10
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 tmpimage l "Render to temporary image" -STARTLINE}
+ tmpimage true
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 pathsmap l "Apply paths map to scene" -STARTLINE}
+ pathsmap true
+ addUserKnob {20 "" l Environment}
+ addUserKnob {43 env_data l "" t "Add extra environment variables to task process.\nENV_NAME1=value1\nENV_NAME2=value2" -STARTLINE}
+ addUserKnob {22 env_nuke_get l "Get Nuke Environment" T "cgru.setNukeEnvironment(nuke.toNode(\"this\"))" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input1
+ }
+ Input {
+  inputs 0
+  name Input2
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input3
+  number 2
+ }
+ Input {
+  inputs 0
+  name Input4
+  number 3
+ }
+ Input {
+  inputs 0
+  name Input5
+  number 4
+ }
+ Input {
+  inputs 0
+  name Input6
+  number 5
+ }
+ Input {
+  inputs 0
+  name Input7
+  number 6
+ }
+ Input {
+  inputs 0
+  name Input8
+  number 7
+ }
+ Input {
+  inputs 0
+  name Input9
+  number 8
+ }
+ Input {
+  inputs 0
+  name Input10
+  number 9
+ }
+ Input {
+  inputs 0
+  name Input11
+  number 10
+ }
+ Input {
+  inputs 0
+  name Input12
+  number 11
+ }
+ Input {
+  inputs 0
+  name Input13
+  number 12
+ }
+ Input {
+  inputs 0
+  name Input14
+  number 13
+ }
+ Input {
+  inputs 0
+  name Input15
+  number 14
+ }
+ Input {
+  inputs 0
+  name Input16
+  number 15
+ }
+ Input {
+  inputs 0
+  name Input17
+  number 16
+ }
+ Input {
+  inputs 0
+  name Input18
+  number 17
+ }
+ Input {
+  inputs 0
+  name Input19
+  number 18
+ }
+ Input {
+  inputs 0
+  name Input20
+  number 19
+ }
+ Input {
+  inputs 0
+  name Input21
+  number 20
+ }
+ Input {
+  inputs 0
+  name Input22
+  number 21
+ }
+ Input {
+  inputs 0
+  name Input23
+  number 22
+ }
+ Input {
+  inputs 0
+  name Input24
+  number 23
+ }
+ Input {
+  inputs 0
+  name Input25
+  number 24
+ }
+ Input {
+  inputs 0
+  name Input26
+  number 25
+ }
+ Input {
+  inputs 0
+  name Input27
+  number 26
+ }
+ Input {
+  inputs 0
+  name Input28
+  number 27
+ }
+ Input {
+  inputs 0
+  name Input29
+  number 28
+ }
+ Input {
+  inputs 0
+  name Input30
+  number 29
+ }
+ Input {
+  inputs 0
+  name Input31
+  number 30
+ }
+ Input {
+  inputs 0
+  name Input32
+  number 31
+ }
+ Input {
+  inputs 0
+  name Input33
+  number 32
+ }
+ Input {
+  inputs 0
+  name Input34
+  number 33
+ }
+ Input {
+  inputs 0
+  name Input35
+  number 34
+ }
+ Input {
+  inputs 0
+  name Input36
+  number 35
+ }
+ Input {
+  inputs 0
+  name Input37
+  number 36
+ }
+ Input {
+  inputs 0
+  name Input38
+  number 37
+ }
+ Input {
+  inputs 0
+  name Input39
+  number 38
+ }
+ Input {
+  inputs 0
+  name Input40
+  number 39
+ }
+ Input {
+  inputs 0
+  name Input41
+  number 40
+ }
+ Input {
+  inputs 0
+  name Input42
+  number 41
+ }
+ Input {
+  inputs 0
+  name Input43
+  number 42
+ }
+ Input {
+  inputs 0
+  name Input44
+  number 43
+ }
+ Input {
+  inputs 0
+  name Input45
+  number 44
+ }
+ Input {
+  inputs 0
+  name Input46
+  number 45
+ }
+ Input {
+  inputs 0
+  name Input47
+  number 46
+ }
+ Input {
+  inputs 0
+  name Input48
+  number 47
+ }
+ Input {
+  inputs 0
+  name Input49
+  number 48
+ }
+ Input {
+  inputs 0
+  name Input50
+  number 49
+ }
+ Input {
+  inputs 0
+  name Input51
+  number 50
+ }
+ Input {
+  inputs 0
+  name Input52
+  number 51
+ }
+ Input {
+  inputs 0
+  name Input53
+  number 52
+ }
+ Input {
+  inputs 0
+  name Input54
+  number 53
+ }
+ Input {
+  inputs 0
+  name Input55
+  number 54
+ }
+ Input {
+  inputs 0
+  name Input56
+  number 55
+ }
+ Input {
+  inputs 0
+  name Input57
+  number 56
+ }
+ Input {
+  inputs 0
+  name Input58
+  number 57
+ }
+ Input {
+  inputs 0
+  name Input59
+  number 58
+ }
+ Input {
+  inputs 0
+  name Input60
+  number 59
+ }
+ Input {
+  inputs 0
+  name Input61
+  number 60
+ }
+ Input {
+  inputs 0
+  name Input62
+  number 61
+ }
+ Input {
+  inputs 0
+  name Input63
+  number 62
+ }
+ Input {
+  inputs 0
+  name Input64
+  number 63
+ }
+ Input {
+  inputs 0
+  name Input65
+  number 64
+ }
+ Input {
+  inputs 0
+  name Input66
+  number 65
+ }
+ Input {
+  inputs 0
+  name Input67
+  number 66
+ }
+ Input {
+  inputs 0
+  name Input68
+  number 67
+ }
+ Input {
+  inputs 0
+  name Input69
+  number 68
+ }
+ Input {
+  inputs 0
+  name Input70
+  number 69
+ }
+ Input {
+  inputs 0
+  name Input71
+  number 70
+ }
+ Input {
+  inputs 0
+  name Input72
+  number 71
+ }
+ Input {
+  inputs 0
+  name Input73
+  number 72
+ }
+ Input {
+  inputs 0
+  name Input74
+  number 73
+ }
+ Input {
+  inputs 0
+  name Input75
+  number 74
+ }
+ Input {
+  inputs 0
+  name Input76
+  number 75
+ }
+ Input {
+  inputs 0
+  name Input77
+  number 76
+ }
+ Input {
+  inputs 0
+  name Input78
+  number 77
+ }
+ Input {
+  inputs 0
+  name Input79
+  number 78
+ }
+ Input {
+  inputs 0
+  name Input80
+  number 79
+ }
+ Input {
+  inputs 0
+  name Input81
+  number 80
+ }
+ Input {
+  inputs 0
+  name Input82
+  number 81
+ }
+ Input {
+  inputs 0
+  name Input83
+  number 82
+ }
+ Input {
+  inputs 0
+  name Input84
+  number 83
+ }
+ Input {
+  inputs 0
+  name Input85
+  number 84
+ }
+ Input {
+  inputs 0
+  name Input86
+  number 85
+ }
+ Input {
+  inputs 0
+  name Input87
+  number 86
+ }
+ Input {
+  inputs 0
+  name Input88
+  number 87
+ }
+ Input {
+  inputs 0
+  name Input89
+  number 88
+ }
+ Input {
+  inputs 0
+  name Input90
+  number 89
+ }
+ Input {
+  inputs 0
+  name Input91
+  number 90
+ }
+ Input {
+  inputs 0
+  name Input92
+  number 91
+ }
+ Input {
+  inputs 0
+  name Input93
+  number 92
+ }
+ Input {
+  inputs 0
+  name Input94
+  number 93
+ }
+ Input {
+  inputs 0
+  name Input95
+  number 94
+ }
+ Input {
+  inputs 0
+  name Input96
+  number 95
+ }
+ Input {
+  inputs 0
+  name Input97
+  number 96
+ }
+ Input {
+  inputs 0
+  name Input98
+  number 97
+ }
+ Input {
+  inputs 0
+  name Input99
+  number 98
+ }
+ Input {
+  inputs 0
+  name Input100
+  number 99
+ }
+ Output {
+  name Output1
+ }
+end_group

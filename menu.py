@@ -8,10 +8,10 @@ pythonTools.addCommand('Templatonator',
 
 
 """
-['Paste template',
-'Open template',
-'Script read',
-'Copy as text',
-'Terminal command']
+['paste template',
+'script read',
+'save to script',
+'open template',
+'copy as text',]
 
 """
