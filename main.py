@@ -4,6 +4,7 @@ from datetime import datetime
 import nuke
 import nukescripts
 
+
 def save_path():
     return '/'.join([os.path.dirname(__file__), 'save_template'])
 
@@ -181,10 +182,6 @@ class TemplatonatorUI(nukescripts.PythonPanel):
             return data
 
 
-def run():
-    template = Templatonator()
-    template.collect_data()
-
-
 if __name__ == '__main__':
-    run()
+    temp = Templatonator()
+    temp.collect_data()
